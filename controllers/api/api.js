@@ -1,12 +1,14 @@
 const router = require('express').Router();
 const fs = require('fs');
 const util = require('util');
-const readFile = util.promisify(fs.readFile); //call readFile instead of fs.readFile - allows promise.
+// Call readFile and writeFile instead of fs.readFile and fs.writeFile - allows promise.
+const readFile = util.promisify(fs.readFile); 
 const writeFile = util.promisify(fs.writeFile);
 
 // queries notes from fs
 function getNotes() {
-    return readFile('db/db.json', 'utf-8').then(rawNotes => [].concat(JSON.parse(rawNotes)))
+    return readFile('db/db.json', 'utf-8')
+        .then(rawNotes => [].concat(JSON.parse(rawNotes)))
 };
 router.get('/notes', (req, res) => {
     getNotes().then(notes => res.json(notes));
